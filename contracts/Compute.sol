@@ -1,70 +1,79 @@
 pragma solidity ^0.4.17;
 
+import "./JobContract.sol";
+
 contract Compute {
 
-  address public supervisor; //this is also the owner
+  address public supervisor; // this is also the owner
 
   struct Bid {
     address bidder; //instance that is bidding on job
-    String ip;
+    string ip;
     uint port;
     uint index;
     //Resource recourse; //description of the resources available
   }
 
   struct Job {
-    //byte identifier;
+    string manifestFile;
     uint index;
     uint numInstances;
     address requester; //who is asking for a job
-    Bid[] bids = new Bid[]();
+    // Bid[] bids;
   }
 
   Job[] jobs;
   Job[] runningJobs;
-
+  mapping (uint => Bid[]) globalBids;
 
   //i think this atomic
-  function createJob(uint numInstances) {
-    Job job = new Job();
-    job.index = jobs.push(job)-1;
-    job.numInstances = numInstances;
-    job.requester = msg.sender.address;
+  function createJob(uint _numInstances, string _manifestFile) public {
+    Job memory job;
+    job.index = jobs.length;
+    job.numInstances = _numInstances;
+    job.requester = msg.sender;
+    job.manifestFile = _manifestFile;
+    jobs[job.index] = job;
   }
 
-  function public view totalJobs() {
-    return jobIdentifiers.length;
+  function totalJobs() public view returns(uint jobsLength) {
+    return jobs.length;
   }
 
-  function retrieveJob(uint identifier) {
-    return jobIdentifiers[identifier];
-  }
+  // function retrieveJob(uint _index) private returns(Job returnedJob) {
+    // return jobs[_index];
+  // }
 
-  function createBid(String ip, uint port) {
-    Job first = jobs[0];
-
-    Bid bid = new Bid();
+  function createBid(string ip, uint port) public {
+    // For some of the compiler warnings - https://github.com/ethereum/solidity/pull/3014
+    Job memory first = jobs[0];
+    Bid memory bid;
     bid.ip = ip;
     bid.port = port;
-    bid.address =  msg.sender.address;
-    bid.index = first.bids.push(bid);
+    bid.bidder = msg.sender;
+    // bid.index = first.bids.length;
+    // first.bids[bid.index] = bid;
+    globalBids[first.index][bid.index] = bid;
 
-    if(first.bids.length == first.numInstances) {
+    if(globalBids[first.index].length == first.numInstances) {
       delete jobs[0];
       runningJobs.push(first);
-      //uint _index, address _requester
-      JobContract jc = new JobContract(first.index, first.requester, first.numInstances);
+      JobContract jc = new JobContract(first.index, first.requester, first.numInstances, first.manifestFile);
 
       //does this work properly?
-      for(int i=0; i<job.bids.length; i++) {
-        Bid b = job.bids[i];
-        jc.addBid(b.bidder, b.ip, b.port, b.index);
+      for(uint i=0; i < globalBids[first.index].length; i++) {
+        Bid memory b = globalBids[first.index][i];
+        address _bidder = b.bidder;
+        string memory _ip = b.ip;
+        uint _port = b.port;
+        uint _index = b.index;
+        jc.addBid(_bidder, _ip, _port, _index);
       }
 
     }
   }
 
-  function completeJob(uint index) {
+  function completeJob(uint index) private {
     delete runningJobs[index];
   }
 

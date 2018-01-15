@@ -6,38 +6,48 @@ contract JobContract {
   uint numInstances;
   address requester;
   address supervisor;
+  string manifestFile;
 
 
-  enum State { NotReady, Ready, Running, Completed }
-
+  enum State { Ready, Running, Completed }
   State state;
 
-  event state;
-
-  function JobContract(uint _index, address _requester, uint _numInstances) public {
+  function JobContract(uint _index, address _requester, uint _numInstances, string _manifestFile) public {
     index = _index;
     requester = _requester;
-    supervisor = msg.sender.address;
+    supervisor = msg.sender;
     numInstances = _numInstances;
+    manifestFile = _manifestFile;
   }
 
-  struct Bid {
+  struct JobBid {
     address bidder; //instance that is bidding on job
-    String ip;
+    string ip;
     uint port;
     uint index;
   }
 
-  Bid[] bids;
+  JobBid[] bids;
 
-  function addBid(address bidder, String ip, uint port, uint index) public {
-    Bid bid = new Bid();
-    bid.bidder = bidder;
-    bid.ip = ip;
-    bid.port = port;
-    bid.index = index;
+  function addBid(address _bidder, string _ip, uint _port, uint _index) public {
+    JobBid memory bid;
+    bid.bidder = _bidder;
+    bid.ip = _ip;
+    bid.port = _port;
+    bid.index = _index;
     bids.push(bid);
   }
 
+  // function retrieveManifestFile(string _manifestFile) return(string) {
+  //   // Get the manifest file from IPFS
+  // }
 
+  // function parseManifestFile(string _manifestFile) {
+  //   // Parse out resources
+  // }
+
+  // function runJob() public {
+  //   retrieveManifestFile(manifestFile);
+  //    parseManifestFile(manifestFile);
+  // }
 }

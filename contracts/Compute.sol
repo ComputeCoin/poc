@@ -27,13 +27,14 @@ contract Compute {
   mapping (uint => Bid[]) globalBids;
 
   //i think this atomic
-  function createJob(uint _numInstances, string _manifestFile) public {
+  function createJob(uint _numInstances, string _manifestFile) public returns (uint) {
     Job memory job;
     job.index = jobs.length;
     job.numInstances = _numInstances;
     job.requester = msg.sender;
     job.manifestFile = _manifestFile;
     jobs[job.index] = job;
+    return job.index;
   }
 
   function totalJobs() public view returns(uint jobsLength) {
@@ -69,7 +70,6 @@ contract Compute {
         uint _index = b.index;
         jc.addBid(_bidder, _ip, _port, _index);
       }
-
     }
   }
 

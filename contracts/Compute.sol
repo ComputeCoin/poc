@@ -33,11 +33,16 @@ contract Compute {
     job.numInstances = _numInstances;
     job.requester = msg.sender;
     job.manifestFile = _manifestFile;
-    jobs[job.index] = job;
+    //jobs[job.index] = job;
+    jobs.push(job);
     return job.index;
   }
 
   function totalJobs() public view returns(uint jobsLength) {
+    return jobs.length;
+  }
+
+  function totalJobs2() public view returns(uint jobsLength) {
     return jobs.length;
   }
 

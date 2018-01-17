@@ -25,7 +25,7 @@ function pushDockerImageToIPFS() {
 
 async function getDockerImageFromIPFS(hash) {
 	// execute
-	// outString = ipfs add ./c
+	// outString = ipfs get <hash>
 	let command = 'ipfs get ' + hash;
 
 	console.log('Get docker cluster image from IPFS, ', command);

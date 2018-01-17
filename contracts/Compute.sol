@@ -48,13 +48,9 @@ contract Compute {
   function createBid(string ip, uint port) public {
     // For some of the compiler warnings - https://github.com/ethereum/solidity/pull/3014
     Job memory first = jobs[0];
-    Bid memory bid;
-    bid.ip = ip;
-    bid.port = port;
-    bid.bidder = msg.sender;
-    // bid.index = first.bids.length;
-    // first.bids[bid.index] = bid;
-    globalBids[first.index][bid.index] = bid;
+
+    Bid memory bid = Bid(msg.sender, ip, port, globalBids[first.index].length);
+    globalBids[first.index].push(bid);
 
     if(globalBids[first.index].length == first.numInstances) {
       delete jobs[0];

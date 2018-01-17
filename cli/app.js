@@ -44,9 +44,19 @@ computeContract.deployed()
       computeContractInstance.createJob(2, "i", {from:account, gas:1000000}).then(function(response){
         console.log("job created", response);
       })
+      .then(function() {
+        //submit 4 bids
+        for(var i=0; i<4; i++) {
+          computeContractInstance.createBid("localhost", 7000, {from:account, gas:1000000}).then(function(response){
+            console.log("bid created", response);
+          });
+        }
+
+      })
       .catch(function(err) {
         console.log("error creating job", err);
       });
+
 
     });
 

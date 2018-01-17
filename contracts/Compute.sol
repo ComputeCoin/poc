@@ -15,9 +15,9 @@ contract Compute {
   }
 
   struct Job {
-    string manifestFile;
     uint index;
     uint numInstances;
+    string manifestFile;
     address requester; //who is asking for a job
     // Bid[] bids;
   }
@@ -28,12 +28,7 @@ contract Compute {
 
   //i think this atomic
   function createJob(uint _numInstances, string _manifestFile) public returns (uint) {
-    Job memory job;
-    job.index = jobs.length;
-    job.numInstances = _numInstances;
-    job.requester = msg.sender;
-    job.manifestFile = _manifestFile;
-    //jobs[job.index] = job;
+    Job memory job = Job(jobs.length,  _numInstances, _manifestFile, msg.sender);
     jobs.push(job);
     return job.index;
   }

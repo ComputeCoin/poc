@@ -1,0 +1,18 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "async": "^2.6.0",
+    "truffle-contract": "^3.0.2",
+    "web3": "^0.20.4",
+    "web3-shh": "^1.0.0-beta.28"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -13,7 +13,6 @@ if (typeof web3 !== 'undefined') {
 
 
 var shh = new Web3Personal('ws://127.0.0.1:8546');
-shh.setProvider(new WebsocketProvider('ws://127.0.0.1:8546'))
 
 var bidDescription = {
   "type": "bid",

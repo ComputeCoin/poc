@@ -13,7 +13,6 @@ if (typeof web3 !== 'undefined') {
 
 
 var shh = new Web3Personal('ws://127.0.0.1:8546');
-shh.setProvider(new WebsocketProvider('ws://127.0.0.1:8546'))
 
 shh.subscribe("messages", {
   symKeyID: identities.symKeyID,
@@ -24,7 +23,6 @@ shh.subscribe("messages", {
   if(message) {
     console.log(JSON.parse(web3.toAscii(message.payload)));
   }
-
-  console.log(err, message);
+  //console.log(err, message);
 
 });

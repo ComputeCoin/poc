@@ -11,9 +11,7 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-
 var shh = new Web3Personal('ws://127.0.0.1:8546');
-shh.setProvider(new WebsocketProvider('ws://127.0.0.1:8546'))
 
 var jobDescription = {
   "type":"job",
@@ -31,9 +29,7 @@ function send() {
        powTime: 1,
        powTarget: 0.2
    }, function(err, response){
-     //console.log("post response", err, response);
    });
-   //console.log('sent =', sent);
 
    setTimeout(send, 10000);
 }

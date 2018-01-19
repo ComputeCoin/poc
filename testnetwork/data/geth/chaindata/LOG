@@ -1,0 +1,28 @@
+=============== Jan 19, 2018 (EST) ===============
+12:38:35.832289 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:38:35.833381 db@open opening
+12:38:35.833974 version@stat F·[] S·0B[] Sc·[]
+12:38:35.834220 db@janitor F·2 G·0
+12:38:35.834266 db@open done T·856.295µs
+=============== Jan 19, 2018 (EST) ===============
+12:38:43.265255 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:38:43.265424 version@stat F·[] S·0B[] Sc·[]
+12:38:43.265439 db@open opening
+12:38:43.265493 journal@recovery F·1
+12:38:43.266499 journal@recovery recovering @1
+12:38:43.267307 memdb@flush created L0@2 N·14 S·903B "9p[..h\xea\xfe,v3":"׃\x19..\xa7\x9f\x03,v5"
+12:38:43.268368 version@stat F·[1] S·903B[903B] Sc·[0.25]
+12:38:43.269246 db@janitor F·3 G·0
+12:38:43.269266 db@open done T·3.819567ms
+=============== Jan 19, 2018 (EST) ===============
+12:39:02.773320 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+12:39:02.773477 version@stat F·[1] S·903B[903B] Sc·[0.25]
+12:39:02.773491 db@open opening
+12:39:02.773546 journal@recovery F·1
+12:39:02.774343 journal@recovery recovering @3
+12:39:02.774947 memdb@flush created L0@5 N·3 S·290B "Blo..ion,v17":"dbU..ata,v16"
+12:39:02.775671 version@stat F·[2] S·1KiB[1KiB] Sc·[0.50]
+12:39:02.776544 db@janitor F·4 G·0
+12:39:02.776564 db@open done T·3.061588ms
+12:40:14.634244 db@close closing
+12:40:14.634397 db@close done T·150.339µs

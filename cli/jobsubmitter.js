@@ -55,22 +55,19 @@ var isDependancyInstalled = () => {
 //
 function writeDockerCompose(imagename, ninstances, ncpus, mem, clusterports) {
 		// write docker-compose.yml
-		let imageStr = 'image: ' + imagename + '\n';
-		let ninstanceStr = 'replicas: ' + ninstances + '\n';
-		let ncpusStr = 'cpus: /"' + ncpus + '/" \n';
-		let memoryStr = 'memory: ' + mem + '\n';
-		let portStr = 'ports: /"' + clusterports + '/" \n';
+		let ncpusStr = '/"' + ncpus + '/" \n';
+		let portStr = '/"' + clusterports + '/" \n';
 		let composeData = {
 			version:'/"3/"',
 			services:[
 					web:[
-						image: imageStr,
+						image: imagename,
 						deploy:[
-							replicas:ninstanceStr,
+							replicas:ninstances,
 							resources:[
 								limits:[
 									cpus:ncpusStr,
-									memory:memoryStr
+									memory:mem
 								]
 							],
 							restart_policy:[

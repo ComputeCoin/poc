@@ -46,7 +46,7 @@ function send() {
    setTimeout(send, 10000);
 }
 
-var isDependancyInstalled = (){
+var isDependancyInstalled = () => {
 	// execute shell script to check if docker and IPFS
 	// is installed
 };
@@ -55,12 +55,40 @@ var isDependancyInstalled = (){
 //
 function writeDockerCompose(imagename, ninstances, ncpus, mem, clusterports) {
 		// write docker-compose.yml
-		let imageStr = 'image: ' + imagename + '\n`;
-		let ninstanceStr = 'replicas: ' + ninstances + '\n`;
+		let imageStr = 'image: ' + imagename + '\n';
+		let ninstanceStr = 'replicas: ' + ninstances + '\n';
 		let ncpusStr = 'cpus: /"' + ncpus + '/" \n';
 		let memoryStr = 'memory: ' + mem + '\n';
 		let portStr = 'ports: /"' + clusterports + '/" \n';
-		let composeData = {version:' /"3/"',services:[web[image: imageStr, deploy[replicas: nInstanceStr, resources:[limits:[cpus:ncpuStr,memory:memoryStr]],restart_policy[condition:'on-failure'], ports[portStr],networks['webnet']]]],networks:[webent:]};
+		let composeData = {
+			version:'/"3/"',
+			services:[
+					web:[
+						image: imageStr,
+						deploy:[
+							replicas:ninstanceStr,
+							resources:[
+								limits:[
+									cpus:ncpusStr,
+									memory:memoryStr
+								]
+							],
+							restart_policy:[
+								condition:'on-failure'
+							]
+						],
+						ports:[
+							portStr
+						],
+						networks:[
+							'webnet'
+						]
+					]
+			],
+			networks:[
+				webent:''
+			]
+		};
 
 		writeYaml.sync('./docker-compose.yml', composeData));
 	}

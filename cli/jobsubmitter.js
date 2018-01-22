@@ -83,11 +83,11 @@ function writeDockerCompose(imagename, ninstances, ncpus, mem, clusterports) {
 					]
 			],
 			networks:[
-				webent:''
+				webent:' '
 			]
 		};
 
-		writeYaml.sync('./docker-compose.yml', composeData));
+		writeYaml.sync('./docker-compose.yml', composeData);
 	}
 }
 

@@ -54,11 +54,10 @@ function getDockerIPFSHash(imageName, callback) {
   });
 }
 
-function sendJob(dockerComposeFile, callback) {
+function sendJob(dockerComposeFile, token, ipport, callback) {
   var contents = fs.readFileSync(dockerComposeFile, "utf-8");
   var doc = jsyaml.safeLoad(contents);
-  var jobid = uuidv1();
-  doc.cpucoin_jobid = jobid;
+
   //iterate over services, grab images, store them, add image hashes
   var services = Object.keys(doc.services);
   async.eachSeries(services, function(serviceKey, done){
@@ -74,16 +73,24 @@ function sendJob(dockerComposeFile, callback) {
   function(err) {
     var yaml = jsyaml.safeDump(doc);
     console.log(yaml);
+    var payload = {
+      "type":"job",
+      "jobid": uuidv1(),
+      "compose": yaml,
+      "token": token,
+      "ipport": ipport
+    }
 
     var sent = shh.post({
          symKeyID: identities.symKeyID, // encrypts using the sym key ID
          sig: identities.signature, // signs the message using the keyPair ID
          ttl: 10,
          topic:  '0x12345678',
-         payload:  yaml,
+         payload:  web3.fromAscii(JSON.stringify(payload)),
          powTime: 1,
          powTarget: 0.2
      }, function(err, response){
+      console.log(err, response);
      });
   }
   );
@@ -103,8 +110,11 @@ function sendJob(dockerComposeFile, callback) {
 
 }
 
-sendJob("./docker-compose.yml", function(err){
 
+var composeFile = process.argv[2];
+var token = process.argv[3];
+var ipport = process.argv[4];
+sendJob(composeFile, token, ipport, function(err){
 });
 
 // //sendJob("./docker-compose.yml");

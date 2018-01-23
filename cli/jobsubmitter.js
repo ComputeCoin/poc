@@ -7,6 +7,7 @@ const fs = require("fs");
 const jsyaml = require("js-yaml");
 const writeYaml = require('write-yaml');
 const { exec } = require('child_process');
+const uuidv1 = require('uuid/v1');
 
 if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
@@ -56,12 +57,15 @@ function getDockerIPFSHash(imageName, callback) {
 function sendJob(dockerComposeFile, callback) {
   var contents = fs.readFileSync(dockerComposeFile, "utf-8");
   var doc = jsyaml.safeLoad(contents);
-
+  var jobid = uuidv1();
+  doc.cpucoin_jobid = jobid;
   //iterate over services, grab images, store them, add image hashes
   var services = Object.keys(doc.services);
   async.eachSeries(services, function(serviceKey, done){
       console.log(serviceKey);
+
       var service = doc.services[serviceKey];
+
       getDockerIPFSHash(service.image, function(err, hash) {
         service.imageIPFS = hash;
         done();
@@ -84,10 +88,7 @@ function sendJob(dockerComposeFile, callback) {
   }
   );
 
-
-   //
-   //
-   // //start listening for results from scheduler
+   // // //start listening for results from scheduler
    // shh.subscribe("messages", {
    //   symKeyID: identities.symKeyID,
    //   topics: ['0x12345678'],
@@ -95,9 +96,9 @@ function sendJob(dockerComposeFile, callback) {
    //   minPow: 0
    // }, function(err, message, subscription) {
    //   if(message) {
-   //     console.log(JSON.parse(web3.toAscii(message.payload)));
+   //     console.log(web3.toAscii(message.payload));
    //   }
-   //   //console.log(err, message);
+   //
    // });
 
 }

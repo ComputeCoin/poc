@@ -11,6 +11,7 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
+console.log(identities);
 
 var shh = new Web3Personal('ws://127.0.0.1:8546');
 
@@ -20,8 +21,9 @@ shh.subscribe("messages", {
   ttl:10,
   minPow: 0
 }, function(err, message, subscription) {
+  console.log(err, message);
   if(message) {
-    console.log(JSON.parse(web3.toAscii(message.payload)));
+    console.log(web3.toAscii(message.payload));
   }
   //console.log(err, message);
 

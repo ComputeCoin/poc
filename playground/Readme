@@ -1,0 +1,19 @@
+
+#Create Test Ethereum Network
+#replace "/Users/samrahman/Documents/computecoin/poc" with the FULL path to your repo clone
+docker run --name testnetwork -t -p 30303:30303 -p 8546:8546 -p 8545:8545 -v /Users/samrahman/Documents/computecoin/poc:/poc playground /poc/testnetwork/startConsole.sh
+
+#RUN Job Scheduler
+docker run --link testnetwork:testnetwork -t -v /Users/samrahman/Documents/computecoin/poc:/poc playground node /poc/cli/scheduler.js
+
+#RUN Job Submitter
+docker run --privileged --link testnetwork:testnetwork -t -v /Users/samrahman/Documents/computecoin/poc:/poc playground node /poc/cli/jobsubmitter.js /poc/cli/docker-compose.yml xxx 1234
+
+#RUN JOB Runner
+docker run --privileged --link testnetwork:testnetwork -t -v /Users/samrahman/Documents/computecoin/poc:/poc playground node /poc/cli/jobrunner.js
+
+#stopping the containers:
+docker rm -f testnetwork;
+docker rm -f jobscheduler;
+docker rm -f jobsubmitter;
+docker rm -f jobrunner;

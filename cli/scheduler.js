@@ -9,12 +9,12 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://testnetwork:8545"));
 }
 
 //console.log(identities);
 
-var shh = new Web3Personal('ws://127.0.0.1:8546');
+var shh = new Web3Personal('ws://testnetwork:8546');
 
 var jobs = [];
 var bids = [];
@@ -28,7 +28,7 @@ shh.subscribe("messages", {
   //console.log(err, message);
   if(message) {
     var jsonPayload = JSON.parse(web3.toAscii(message.payload));
-    //console.log(jsonPayload);
+    console.log(jsonPayload);
     if(jsonPayload.type=="job") {
       var compose = jsonPayload["compose"];
       composeYaml = jsyaml.safeLoad(compose);

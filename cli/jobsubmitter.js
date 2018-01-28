@@ -13,10 +13,10 @@ if (typeof web3 !== 'undefined') {
   web3 = new Web3(web3.currentProvider);
 } else {
   // set the provider you want from Web3.providers
-  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://testnetwork:8545"));
 }
 
-var shh = new Web3Personal('ws://127.0.0.1:8546');
+var shh = new Web3Personal('ws://testnetwork:8546');
 
 shh.net.getId(function(err, id){
   console.log("peerid", err, id);

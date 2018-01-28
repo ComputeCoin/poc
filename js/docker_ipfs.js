@@ -9,14 +9,14 @@ function saveDockerImageToIPFS(imageName) {
 	// docker save imageName -o cluster-img.tar
 	let command = 'docker save ' + imageName + ' -o cluster-image.tar';
 	console.log('Executing command, ', command);
-	
+
 	return exec(command);
 }
 
 function pushDockerImageToIPFS() {
 
 	// execute
-	// outString = ipfs add ./cluster-img.tar 
+	// outString = ipfs add ./cluster-img.tar
 	var command = 'ipfs add ./cluster-image.tar';
 	var hash = ' ';
 	console.log('PUSH docker cluster image to IPFS, ', command);
@@ -25,7 +25,7 @@ function pushDockerImageToIPFS() {
 
 async function getDockerImageFromIPFS(hash) {
 	// execute
-	// outString = ipfs add ./cluster-img.tar 
+	// outString = ipfs add ./cluster-img.tar
 	let command = 'ipfs cat ' + hash + ' | tee docker-cluster-img.tar';
 
 	console.log('Get docker cluster image from IPFS, ', command);
@@ -49,7 +49,7 @@ ipfsSave
 				let ipfsOutString = stdout.split(" ");
 
 				imageHash = ipfsOutString[1];
-		
+
 				console.log('IPFS Hash string for docker image => ', imageHash);
 				getDockerImageFromIPFS(imageHash);
 			});

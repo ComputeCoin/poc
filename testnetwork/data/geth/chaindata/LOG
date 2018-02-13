@@ -223,3 +223,42 @@
 18:36:13.140996 version@stat F·[2 1] S·1KiB[486B 971B] Sc·[0.50 0.00]
 18:36:13.148711 db@janitor F·5 G·0
 18:36:13.149088 db@open done T·35.983099ms
+=============== Feb 13, 2018 (UTC) ===============
+23:20:46.802851 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+23:20:46.807938 version@stat F·[2 1] S·1KiB[486B 971B] Sc·[0.50 0.00]
+23:20:46.808278 db@open opening
+23:20:46.809647 journal@recovery F·1
+23:20:46.812227 journal@recovery recovering @58
+23:20:46.816772 memdb@flush created L0@60 N·2 S·243B "Blo..ion,v68":"Las..der,v69"
+23:20:46.819254 version@stat F·[3 1] S·1KiB[729B 971B] Sc·[0.75 0.00]
+23:20:46.823973 db@janitor F·6 G·0
+23:20:46.824182 db@open done T·15.733699ms
+=============== Feb 13, 2018 (EST) ===============
+18:23:40.224129 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:23:40.224308 version@stat F·[3 1] S·1KiB[729B 971B] Sc·[0.75 0.00]
+18:23:40.224323 db@open opening
+18:23:40.224375 journal@recovery F·1
+18:23:40.224618 journal@recovery recovering @61
+18:23:40.225605 memdb@flush created L0@63 N·2 S·243B "Blo..ion,v71":"Las..der,v72"
+18:23:40.226036 version@stat F·[4 1] S·1KiB[972B 971B] Sc·[1.00 0.00]
+18:23:40.226721 db@janitor F·7 G·0
+18:23:40.226737 db@open done T·2.407238ms
+18:23:40.226821 table@compaction L0·4 -> L1·1 S·1KiB Q·73
+18:23:40.227224 table@build created L1@66 N·16 S·971B "9p[..h\xea\xfe,v3":"׃\x19..\xa7\x9f\x03,v5"
+18:23:40.227252 version@stat F·[0 1] S·971B[0B 971B] Sc·[0.00 0.00]
+18:23:40.227394 table@compaction committed F-4 S-972B Ke·0 D·8 T·547.865µs
+18:23:40.227478 table@remove removed @63
+18:23:40.227543 table@remove removed @60
+18:23:40.227621 table@remove removed @57
+18:23:40.227675 table@remove removed @54
+18:23:40.228029 table@remove removed @53
+=============== Feb 13, 2018 (EST) ===============
+18:23:57.424669 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+18:23:57.424912 version@stat F·[0 1] S·971B[0B 971B] Sc·[0.00 0.00]
+18:23:57.424930 db@open opening
+18:23:57.424983 journal@recovery F·1
+18:23:57.425960 journal@recovery recovering @64
+18:23:57.426960 memdb@flush created L0@67 N·1 S·301B "eth..\x9a\x9b\xda,v74":"eth..\x9a\x9b\xda,v74"
+18:23:57.427812 version@stat F·[1 1] S·1KiB[301B 971B] Sc·[0.25 0.00]
+18:23:57.428541 db@janitor F·4 G·0
+18:23:57.428559 db@open done T·3.622703ms

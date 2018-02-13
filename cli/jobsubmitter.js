@@ -9,20 +9,23 @@ const writeYaml = require('write-yaml');
 const { exec } = require('child_process');
 const uuidv1 = require('uuid/v1');
 
-if (typeof web3 !== 'undefined') {
-  web3 = new Web3(web3.currentProvider);
-} else {
+
+var web3 = null;
+var shh = null;
+var _swarmCommandToken = {};
+
+function initialize() {
+
   // set the provider you want from Web3.providers
-  web3 = new Web3(new Web3.providers.HttpProvider("http://testnetwork:8545"));
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+  shh = new Web3Personal('ws://localhost:8546');
+
+  shh.net.getId(function(err, id){
+    console.log("peerid", err, id);
+  });
 }
 
-var shh = new Web3Personal('ws://testnetwork:8546');
-
-shh.net.getId(function(err, id){
-  console.log("peerid", err, id);
-});
-
-var _swarmCommandToken = {};
 
 function saveDockerImageLocally(imageName, callback) {
 
@@ -95,27 +98,18 @@ function sendJob(dockerComposeFile, token, ipport, callback) {
   }
   );
 
-   // // //start listening for results from scheduler
-   // shh.subscribe("messages", {
-   //   symKeyID: identities.symKeyID,
-   //   topics: ['0x12345678'],
-   //   ttl:10,
-   //   minPow: 0
-   // }, function(err, message, subscription) {
-   //   if(message) {
-   //     console.log(web3.toAscii(message.payload));
-   //   }
-   //
-   // });
-
 }
 
 
-var composeFile = process.argv[2];
-var token = process.argv[3];
-var ipport = process.argv[4];
-sendJob(composeFile, token, ipport, function(err){
-});
+module.exports.sendJob = sendJob;
+module.exports.initialize = initialize;
+
+//
+// var composeFile = process.argv[2];
+// var token = process.argv[3];
+// var ipport = process.argv[4];
+// sendJob(composeFile, token, ipport, function(err){
+// });
 
 // //sendJob("./docker-compose.yml");
 // saveDockerImageLocally("hello-world", function(err, filename) {

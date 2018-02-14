@@ -31,7 +31,9 @@ function saveDockerImageLocally(imageName, callback) {
 
 	// execute
 	// docker save imageName -o cluster-img.tar
-	var tarfile = 'cpucoin.' + imageName + '.tar';
+	//
+	var filename = imageName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+	var tarfile = 'cpucoin.' + filename + '.tar';
 	let command = 'docker save ' + imageName + ' -o ' + tarfile;
 	console.log('Executing command, ', command);
 

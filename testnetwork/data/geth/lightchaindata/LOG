@@ -14,3 +14,13 @@
 18:23:40.231049 version@stat F·[1] S·903B[903B] Sc·[0.25]
 18:23:40.232140 db@janitor F·3 G·0
 18:23:40.232157 db@open done T·4.229232ms
+=============== Feb 13, 2018 (EST) ===============
+20:26:41.063611 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+20:26:41.064186 version@stat F·[1] S·903B[903B] Sc·[0.25]
+20:26:41.064198 db@open opening
+20:26:41.064240 journal@recovery F·1
+20:26:41.066130 journal@recovery recovering @3
+20:26:41.066720 memdb@flush created L0@5 N·1 S·301B "eth..\x9a\x9b\xda,v16":"eth..\x9a\x9b\xda,v16"
+20:26:41.067137 version@stat F·[2] S·1KiB[1KiB] Sc·[0.50]
+20:26:41.067862 db@janitor F·4 G·0
+20:26:41.067878 db@open done T·3.675734ms

@@ -8,6 +8,7 @@ const jsyaml = require("js-yaml");
 
 function initialize() {
 
+
   var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   var shh = new Web3Personal('ws://localhost:8546');

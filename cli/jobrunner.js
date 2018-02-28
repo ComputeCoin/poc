@@ -7,7 +7,11 @@ const uuidv1 = require('uuid/v1');
 const { exec } = require('child_process');
 
 
-function initialize() {
+var log = console.log
+
+function initialize(logger) {
+
+  log = logger;
 
   var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
@@ -40,15 +44,15 @@ function initialize() {
 
        if(jsonPayload.type=="job" && jsonPayload.bidid == bidDescription.bidid) {
 
-         console.log("JOB ARRIVED, YAY!!!", jsonPayload);
+         log("job has been matched! ", jsonPayload);
          var token = jsonPayload.token;
          var ipport = jsonPayload.ipport;
-         console.log(token, ipport);
+         log(token, ipport);
 
          //attach to the docker!!!
          var command = 'docker-machine ssh myvm2 "docker swarm join --token ' + token + ' ' + ipport + '"';
          exec(command, function(err, stdout, stderr){
-           console.log(err, stdout, stderr);
+           log(err, stdout, stderr);
          });
          // docker-machine ssh myvm2 "docker swarm join \
          // --token <token> \

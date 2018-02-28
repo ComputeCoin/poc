@@ -14,16 +14,15 @@ var web3 = null;
 var shh = null;
 var _swarmCommandToken = {};
 
-function initialize() {
+var log = console.log;
+
+function initialize(logger) {
+  log = logger;
 
   // set the provider you want from Web3.providers
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   shh = new Web3Personal('ws://localhost:8546');
-
-  shh.net.getId(function(err, id){
-    console.log("peerid", err, id);
-  });
 }
 
 
@@ -35,10 +34,10 @@ function saveDockerImageLocally(imageName, callback) {
 	var filename = imageName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 	var tarfile = 'cpucoin.' + filename + '.tar';
 	let command = 'docker save ' + imageName + ' -o ' + tarfile;
-	console.log('Executing command, ', command);
+	log('Executing command, ', command);
 
 	exec(command, function(err, stdout, stderr){
-    console.log(err, stdout, stderr);
+    log("docker image exported to tar file");
     callback(err, tarfile);
   });
 }
@@ -46,7 +45,7 @@ function saveDockerImageLocally(imageName, callback) {
 function pushDockerImageToIPFS(localImageTarFile, callback) {
   command = "ipfs add ./" + localImageTarFile;
   exec(command, function(err, stdout, stderr){
-    console.log(err, stdout, stderr);
+    log("docker image posted to ipfs")
     //grab ipfs hash
     var hash = stdout.split(" ")[1]
     callback(err, hash);
@@ -66,7 +65,7 @@ function sendJob(dockerComposeFile, token, ipport, callback) {
   //iterate over services, grab images, store them, add image hashes
   var services = Object.keys(doc.services);
   async.eachSeries(services, function(serviceKey, done){
-      console.log(serviceKey);
+      //console.log(serviceKey);
 
       var service = doc.services[serviceKey];
 
@@ -78,20 +77,25 @@ function sendJob(dockerComposeFile, token, ipport, callback) {
   function(err) {
     var yaml = jsyaml.safeDump(doc);
     console.log(yaml);
+
     var payload = {
       "type":"job",
       "jobid": uuidv1(),
       "compose": yaml,
       "token": token,
       "ipport": ipport
-    }
+    };
+
+    console.log(payload);
+
+    payloadStr = JSON.stringify(payload, null, 2);
 
     var sent = shh.post({
          symKeyID: identities.symKeyID, // encrypts using the sym key ID
          sig: identities.signature, // signs the message using the keyPair ID
          ttl: 10,
          topic:  '0x12345678',
-         payload:  web3.fromAscii(JSON.stringify(payload)),
+         payload:  web3.fromAscii(payloadStr),
          powTime: 1,
          powTarget: 0.2
      }, function(err, response){

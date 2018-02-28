@@ -5,9 +5,14 @@ const WebsocketProvider = require("web3-providers-ws");
 const identities = require("./identities.json");
 const jsyaml = require("js-yaml");
 
+var log = console.log;
 
-function initialize() {
+function initialize(logger) {
 
+  log = logger;
+
+  log("Listening for Jobs");
+  log("Listening for Compute Nodes");
 
   var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
@@ -22,28 +27,32 @@ function initialize() {
     ttl:10,
     minPow: 0
   }, function(err, message, subscription) {
-    //console.log(err, message);
+
     if(message) {
       var jsonPayload = JSON.parse(web3.toAscii(message.payload));
-      console.log(jsonPayload);
+
       if(jsonPayload.type=="job") {
+        log("job has arrived");
+        log(JSON.stringify(jsonPayload, null, 2));
         var compose = jsonPayload["compose"];
         composeYaml = jsyaml.safeLoad(compose);
         jsonPayload.composeYaml = composeYaml;
         jobs.push(jsonPayload);
       }
       else {
+        log("compute node has arrived");
+        log(JSON.stringify(jsonPayload, null, 2));
         bids.push(jsonPayload);
       }
     }
-    //console.log(err, message);
 
   });
 
 
   function matchJobsToBids() {
+
     if(bids.length > 0 && jobs.length > 0) {
-      console.log("WE ARE ABLE TO MATCH!!!!!");
+      log("we have enough jobs and bids to match");
       var job = jobs.pop();
       var bid = bids.pop();
       job.bidid = bid.bidid;
@@ -56,12 +65,11 @@ function initialize() {
            powTime: 1,
            powTarget: 0.2
        }, function(err, response){
-        console.log(err, response);
+        log(err, response);
        });
     }
-    setTimeout(matchJobsToBids, 1000);
+    setTimeout(matchJobsToBids, 3000);
   }
-
 
   matchJobsToBids();
 }

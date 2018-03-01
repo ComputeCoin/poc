@@ -9,19 +9,45 @@ const { exec } = require('child_process');
 
 var log = console.log
 
-function initialize(logger) {
+var bid = null;
+
+var walletManager = null;
+
+function getBid() {
+  return bid;
+}
+
+
+function updateBalance() {
+ if(bid && bid.runningJob) {
+   console.log('jobrunner: updateing balance')
+   walletManager.addToBalance(.01);
+ }
+ else {
+   console.log('jobrunner: not updating balance')
+ }
+ setTimeout(updateBalance,60000);
+}
+
+function initialize(logger, wmanager) {
 
   log = logger;
+
+  walletManager = wmanager;
+
+  updateBalance();
+
 
   var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   var shh = new Web3Personal('ws://localhost:8546');
 
-  var bidDescription = {
+  bid = bidDescription =  {
     "type": "bid",
-    "numCores":2,
+    "cpus":2,
     "bidid": uuidv1(),
-    "memory":2 //gigabytes
+    "memory":50, //mi
+    "runningJob":null
   };
 
   /*
@@ -29,6 +55,28 @@ function initialize(logger) {
   --token <token> \
   <ip>:2377"
    */
+
+   //notify accountant
+   payloadStr = JSON.stringify({
+     "type": "nodeLaunchedMessage",
+     "nodeType": "computenode",
+     "nodeId": bid.bidid,
+     "msg":"compute node " + bid.bidid + " launched"
+   }, null, 2);
+
+   var sent = shh.post({
+        symKeyID: identities.symKeyID, // encrypts using the sym key ID
+        sig: identities.signature, // signs the message using the keyPair ID
+        ttl: 10,
+        topic:  '0x12345678',
+        payload:  web3.fromAscii(payloadStr),
+        powTime: 1,
+        powTarget: 0.2
+    }, function(err, response){
+     console.log(err, response);
+    });
+    //done notifying accountant
+
 
   //listen for launch message specific to my bid
    shh.subscribe("messages", {
@@ -47,6 +95,7 @@ function initialize(logger) {
          log("job has been matched! ", jsonPayload);
          var token = jsonPayload.token;
          var ipport = jsonPayload.ipport;
+         bid.runningJob = jsonPayload;
          log(token, ipport);
 
          //attach to the docker!!!
@@ -78,3 +127,4 @@ function initialize(logger) {
 }
 
 module.exports.initialize = initialize;
+module.exports.getBid = getBid;

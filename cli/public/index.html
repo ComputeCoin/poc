@@ -1,0 +1,487 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+
+  <script src="/js/material.min.js"></script>
+  <script src="/js/jquery3.3.1.min.js"></script>
+  <script src="/js/moment.js"></script>
+  <script src="/js/vis.min.js"></script>
+  <link rel="stylesheet" href="/font-awesome-4.7.0/css/font-awesome.min.css"/>
+  <link rel="stylesheet" href="/vis/vis.css"/>
+  <meta charset="UTF-8">
+  <style>
+   .section {
+     display: inline-block;
+     min-height:200px;
+     width:300px;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+     padding:20px;
+     margin:20px;
+     margin-right:0px;
+     margin-bottom:0px;
+     vertical-align: top;
+     position:relative;
+   }
+   .section .balance {
+     text-align:center;
+     font-weight:bold;
+     font-size:30px;
+     padding-top:40px;
+     color: white;
+   }
+   .fullsection {
+     position:relative;
+     min-height:150px;
+     display: block;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+     padding:20px;
+      padding-bottom:40px;
+     margin:20px;
+     vertical-align: top;
+     max-width:1030px;
+   }
+   .halfsection {
+     position:relative;
+     min-height:150px;
+     display: inline-block;
+     border-radius: 5px;
+     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+     padding:20px;
+     margin:20px;
+     margin-right:0px;
+     margin-bottom:0px;
+     vertical-align: top;
+     min-width:482px;
+     padding-bottom:69px;
+   }
+
+   .sectionheader {
+     font-size:20px;
+     margin-bottom:20px;
+     vertical-align: top;
+   }
+
+   .launch-button {
+     position:absolute;
+     bottom:20px;
+     left:20px;
+   }
+
+   .submit-job-button {
+     position: absolute;
+     right:20px;
+     top:20px;
+   }
+   .launchedSpinner {
+     position:absolute;
+     top:20px;
+     right:20px;
+   }
+
+   .main {
+     width:1200px;
+     margin:auto;
+   }
+
+   table {
+     font-size:14px;
+   }
+
+   table td {
+     padding-bottom:5px;
+     padding-right:5px;
+     border-bottom: 1px solid #4054b2;
+   }
+
+   table th {
+     font-weight: bold;
+     font-size:14px;
+     text-align:left;
+     border-bottom: 1px solid #4054b2;
+   }
+  </style>
+</head>
+<body>
+    <!-- Simple header with fixed tabs. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header
+              mdl-layout--fixed-tabs">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Compute Coin</span>
+      </div>
+      <!-- Tabs -->
+      <!-- <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+        <a href="#fixed-tab-1" class="mdl-layout__tab is-active">Manage Runs</a>
+        <a href="#fixed-tab-2" class="mdl-layout__tab">Manage Account</a>
+      </div> -->
+    </header>
+    <!-- <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Title</span>
+    </div>  -->
+    <div class="main">
+      <div class="section" style="background-color:#c2185b; color:white">
+        <div class="sectionheader"><i class="fa fa-usd"></i> Wallet</div>
+        <p id="balance" class="balance">
+          0
+        </p>
+      </div>
+
+      <div class="section">
+        <div class="sectionheader"><i style="font-size:26px" class="fa fa-clock-o" aria-hidden="true"></i> Scheduler</div>
+        <div id="schedulerSpinner" class="launchedSpinner mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        <p>
+          A scheduler node is responsible for matching jobs to compute nodes
+        </p>
+
+        <table id="schedulerQueueTable">
+          <tr><th colspan="2">Queue</th></tr>
+          <tbody id="scheduleQueueTableBody">
+          <tr><td>Jobs</td><td>1</td></tr>
+          <tr><td>Computes</td><td>2</td></tr>
+          </tbody>
+        </table>
+
+        <button id="launchSchedulerNode" class="launch-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          Launch A Scheduler Node
+        </button>
+      </div>
+
+      <div class="section">
+        <div class="sectionheader"><i class="fa fa-calculator" aria-hidden="true"></i> Accountant</div>
+        <div id="accountantSpinner" class="launchedSpinner mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+        <p>
+          An accountant node is responsible for confirming amount of work done.
+        </p>
+        <button id="launchAccountantNode" class="launch-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          Launch Account Node
+        </button>
+        <button id="viewAccountantLogs"  class="launch-button mdl-button mdl-js-button mdl-button--raised mdl-button--accent">
+          View Peers
+        </button>
+      </div>
+
+      <br/>
+
+      <div class="fullsection">
+        <div class="sectionheader">
+          <i class="fa fa-code-fork" style="vertical-align:middle; font-size:25px;" aria-hidden="true"></i> Compute Node
+        </div>
+        <div id="computeSpinner" class="launchedSpinner mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+
+        <p>
+          A compute node is responsible for running someone elses job. A compute node will take up resources on your machine.
+        </p>
+
+        <table id="computeNodeTable" style="width:100%">
+          <tr><th width="200px">ID</th><th width="60px">Mem</th><th width="60px">CPU</th><th width="100px">Status</th><th width="400px">Job</th></tr>
+          <tbody id="computeNodeTableBody">
+            <tr><td></td><td>50Mi</td><td>20%</td><td>Idle</td><td></td></tr>
+          </tbody>
+        </table>
+
+        <button id="launchComputeNode" class="launch-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          Launch Compute Node
+        </button>
+      </div>
+
+      <div class="fullsection" style="padding-bottom:65px;">
+        <div class="sectionheader">
+          <i class="fa fa-terminal" style="vertical-align:middle; font-size:13px; border: 2px solid black; padding:4px; border-radius:3px" aria-hidden="true"></i> Jobs
+        </div>
+
+        <div id="jobsSpinner" class="launchedSpinner mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>
+
+        <table style="margin-top:20px; width:100%">
+          <tr><th width="150px">Job Details</th><th width="100px">Status</th><th width="100px">Run Time</th></tr>
+          <tbody id="jobTableBody">
+          </tbody>
+        </table>
+
+        <p id="jobSectionDescription">
+          You have no jobs.
+        </p>
+
+        <button id="launchJobNode" class="launch-button mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+          Submit a job
+        </button>
+
+      </div>
+
+</body>
+<script>
+
+  $(document).ready(function () {
+
+    updateStatus();
+    drawScheduler(null);
+    drawAccountant(null);
+    drawComputeNode(null);
+    drawWallet(null);
+
+    $("#launchComputeNode").on("click", function() {
+      launchComputeNode();
+    });
+
+    $("#launchSchedulerNode").on("click", function() {
+
+      launchSchedulerNode();
+    });
+
+    $("#launchAccountantNode").on("click", function() {
+
+      launchAccountantNode();
+    });
+
+    $("#launchJobNode").on("click", function() {
+
+      $.ajax({
+            url: '/submitJob/',
+            data: {},
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            async: true,
+            success: function(msg){
+              //alert(msg);
+            },
+            error: function(msg){
+              alert(msg);
+                console.log("error in post_help " + msg);
+            }
+        });
+    });
+
+    $("#viewAccountantLogs").on("click", function() {
+      window.location="/accountant.html"
+    })
+  });
+
+  function updateStatus() {
+    $.ajax({
+          url: '/status',
+          data: {},
+          type: 'GET',
+          cache: false,
+          processData: false,
+          contentType: false,
+          async: true,
+          success: function(msg){
+            var status = JSON.parse(msg);
+            console.log(status);
+            drawJobs(status.jobs);
+            drawScheduler(status.scheduler);
+            drawAccountant(status.accountant);
+            drawComputeNode(status.computeNode);
+            drawWallet(status.wallet);
+          },
+          error: function(msg){
+            //alert(msg);
+              console.log("error in post_help " + msg);
+          }
+      });
+
+      setTimeout(updateStatus, 1000);
+
+  }
+
+  //launch scheduler node
+  function launchSchedulerNode() {
+    $.ajax({
+          url: '/launchSchedulerNode/',
+          data: {},
+          type: 'POST',
+          cache: false,
+          processData: false,
+          contentType: false,
+          async: true,
+          success: function(msg){
+            //alert(msg);
+            console.log(msg);
+          },
+          error: function(msg){
+            alert(msg);
+              console.log("error in post_help " + msg);
+          }
+      });
+  }
+
+  //launch accountant node
+  function launchAccountantNode() {
+    $.ajax({
+          url: '/launchAccountantNode/',
+          data: {},
+          type: 'POST',
+          cache: false,
+          processData: false,
+          contentType: false,
+          async: true,
+          success: function(msg){
+            //alert(msg);
+            console.log(msg);
+          },
+          error: function(msg){
+            alert(msg);
+              console.log("error in post_help " + msg);
+          }
+      });
+  }
+
+
+    //launch accountant node
+    function launchComputeNode() {
+      $.ajax({
+            url: '/launchComputeNode/',
+            data: {},
+            type: 'POST',
+            cache: false,
+            processData: false,
+            contentType: false,
+            async: true,
+            success: function(msg){
+              //alert(msg);
+              console.log(msg);
+            },
+            error: function(msg){
+              alert(msg);
+                console.log("error in post_help " + msg);
+            }
+        });
+    }
+
+  function drawScheduler(scheduler) {
+    //alert(scheduler);
+    if(scheduler) {
+      //alert(scheduler);
+      //hide launch button
+      //display queue of jobs and bids
+      document.getElementById("launchSchedulerNode").style.display = "none";
+      document.getElementById("schedulerQueueTable").style.display = "block";
+      document.getElementById("schedulerSpinner").style.display = "block";
+
+      var tableBody = document.getElementById("scheduleQueueTableBody");
+
+      var computes = scheduler.bids.length;
+      var jobs = scheduler.jobs.length;
+
+      var html = `
+        <tr><td>Jobs</td><td>${jobs}</td></tr>
+        <tr><td>Computes</td><td>${computes}</td></tr>
+      `
+
+      tableBody.innerHTML = html;
+    }
+    else {
+      document.getElementById("launchSchedulerNode").style.display = "block";
+      document.getElementById("schedulerQueueTable").style.display = "none";
+      document.getElementById("schedulerSpinner").style.display = "none";
+    }
+  }
+
+  function drawAccountant(accountant) {
+    if(accountant) {
+      document.getElementById("accountantSpinner").style.display = "block";
+      document.getElementById("launchAccountantNode").style.display="none";
+      document.getElementById("viewAccountantLogs").style.display="block";
+    }
+    else {
+      document.getElementById("accountantSpinner").style.display = "none";
+      document.getElementById("launchAccountantNode").style.display="block";
+      document.getElementById("viewAccountantLogs").style.display="none";
+    }
+  }
+
+  function drawComputeNode(computeNode) {
+    console.log(computeNode)
+    if(computeNode) {
+      document.getElementById("computeSpinner").style.display = "block";
+      document.getElementById("launchComputeNode").style.display="none";
+      document.getElementById("computeNodeTable").style.display="block";
+
+      var mem = computeNode.memory;
+      var cpu = computeNode.cpus;
+      var status = computeNode.runningJob ? "busy" : "idle";
+      var jobname = computeNode.runningJob ? computeNode.runningJob.name : "";
+      var jobid = computeNode.runningJob ? computeNode.runningJob.jobid: "";
+      var bidid = computeNode.bidid;
+    //  alert(computeNode)
+      var html = `<tr><td>${bidid}</td><td>${mem}</td><td>${cpu}</td><td>${status}</td><td><div>${jobname}</div><div>${jobid}</div></td></tr>`;
+      document.getElementById("computeNodeTableBody").innerHTML = html;
+    }
+    else {
+      document.getElementById("computeSpinner").style.display = "none";
+      document.getElementById("launchComputeNode").style.display="block";
+      document.getElementById("computeNodeTable").style.display="none";
+    }
+  }
+
+  function drawJobs(jobs) {
+    var el = document.getElementById("jobTableBody");
+
+    document.getElementById("jobSectionDescription").style.display = (jobs.length > 0) ? "none": "block";
+    document.getElementById("jobsSpinner").style.display = (jobs.length > 0) ? "block": "none";
+
+    var html = [];
+    for(var i=0; i<jobs.length; i++) {
+      var job = jobs[i];
+      var jobid = job.jobid;
+      var status = job.status;
+      var runtime = job.startTime ? -1*moment.duration(moment(job.startTime).diff(moment())).asMinutes().toFixed(2) : "not started";
+      var jobname = job.name;
+      var jobHTML = `
+      <tr>
+      <td>
+        <div>${jobname}</div>
+        <div>id: ${jobid}</div>
+      </td>
+      <td>${status}</td>
+      <td>${runtime}</td>
+      </tr>
+      `;
+
+      html.push(jobHTML);
+    }
+    el.innerHTML = html.join("");
+  }
+
+  function drawWallet(wallet) {
+    if(wallet) {
+      var balanceElement = document.getElementById("balance");
+      balanceElement.innerHTML = wallet.balance.toFixed(8);
+    }
+  }
+
+  //get jobs
+  function getJobs() {
+    $.ajax({
+          url: '/jobs/',
+          type: 'GET',
+          cache: false,
+          processData: false,
+          contentType: false,
+          async: true,
+          success: function(msg){
+            //alert(msg);
+            drawJobs(JSON.parse(msg));
+          },
+          error: function(msg){
+            //alert(msg);
+              console.log("error in post_help " + msg);
+          }
+      });
+  }
+
+  function getStatus() {
+
+  }
+
+  //run job
+  function runJob() {
+
+  }
+</script>
+</html>

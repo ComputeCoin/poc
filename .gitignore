@@ -5,9 +5,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+<<<<<<< HEAD
 # Tar
 *.tar
 
+=======
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 # Runtime data
 pids
 *.pid

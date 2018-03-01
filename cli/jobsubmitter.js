@@ -15,17 +15,24 @@ var shh = null;
 var _swarmCommandToken = {};
 
 var log = console.log;
+<<<<<<< HEAD
 var jobs = [];
 var walletManager = null;
 
 function initialize(logger, wmanager) {
   log = logger;
   walletManager = wmanager;
+=======
+
+function initialize(logger) {
+  log = logger;
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 
   // set the provider you want from Web3.providers
   web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   shh = new Web3Personal('ws://localhost:8546');
+<<<<<<< HEAD
 
   //notify accountant
   setTimeout(function() {
@@ -79,6 +86,8 @@ function initialize(logger, wmanager) {
     }
 
   });
+=======
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 }
 
 
@@ -114,6 +123,7 @@ function getDockerIPFSHash(imageName, callback) {
   });
 }
 
+<<<<<<< HEAD
 function getJobs() {
   return jobs;
 }
@@ -135,6 +145,11 @@ function sendJob(name, dockerComposeFile, token, ipport, callback) {
 
   jobs.push(payload);
   callback(null, payload);
+=======
+function sendJob(dockerComposeFile, token, ipport, callback) {
+  var contents = fs.readFileSync(dockerComposeFile, "utf-8");
+  var doc = jsyaml.safeLoad(contents);
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 
   //iterate over services, grab images, store them, add image hashes
   var services = Object.keys(doc.services);
@@ -152,6 +167,7 @@ function sendJob(name, dockerComposeFile, token, ipport, callback) {
     var yaml = jsyaml.safeDump(doc);
     console.log(yaml);
 
+<<<<<<< HEAD
     payload.compose = yaml;
 
     // var payload = {
@@ -164,6 +180,17 @@ function sendJob(name, dockerComposeFile, token, ipport, callback) {
 
     console.log(payload);
     //jobs.push(payload);
+=======
+    var payload = {
+      "type":"job",
+      "jobid": uuidv1(),
+      "compose": yaml,
+      "token": token,
+      "ipport": ipport
+    };
+
+    console.log(payload);
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 
     payloadStr = JSON.stringify(payload, null, 2);
 
@@ -177,10 +204,13 @@ function sendJob(name, dockerComposeFile, token, ipport, callback) {
          powTarget: 0.2
      }, function(err, response){
       console.log(err, response);
+<<<<<<< HEAD
       payload.sent = true;
       payload.schedulerResponse = response;
       payload.status="queued"
       walletManager.addToBalance(-3);
+=======
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
      });
   }
   );
@@ -190,7 +220,10 @@ function sendJob(name, dockerComposeFile, token, ipport, callback) {
 
 module.exports.sendJob = sendJob;
 module.exports.initialize = initialize;
+<<<<<<< HEAD
 module.exports.getJobs = getJobs;
+=======
+>>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 
 //
 // var composeFile = process.argv[2];

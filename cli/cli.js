@@ -2,22 +2,16 @@ var program = require('commander');
 var jobSubmitter = require('./jobsubmitter.js')
 var scheduler = require('./scheduler.js')
 var jobrunner = require('./jobrunner.js')
-<<<<<<< HEAD
 var accountant = require('./accountant.js');
 var walletManager = require("./wallet.js")
 const express = require('express')
 const app = express();
-=======
-const express = require('express')
-const app = express()
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 const os= require('os');
 const openport = require('openport');
 
 var chalk = require('chalk');
 var figlet = require('figlet');
 
-<<<<<<< HEAD
 app.use(express.static('public'))
 
 var logs=[];
@@ -106,35 +100,6 @@ app.get('/scheduler/logs', function(req, res) {
 
 })
 
-=======
-
-var logs=[];
-var name=null;
-
-app.get('/', function(req, res) {
-
-  const hostName = os.hostname();
-  var prettyLogs = "<h2>" + name + " - " + hostName + "</h2>";
-  prettyLogs+="<ul>";
-  for(var i=0; i<logs.length; i++) {
-      prettyLogs+="<li>" + logs[i] + "</li>";
-  }
-  prettyLogs+="</ul>"
-
-  var output=`
-  <html>
-    <head><meta http-equiv="refresh" content="10"></head>
-    <body>${prettyLogs}</body>
-    <script>
-      window.scrollTo(0,document.body.scrollHeight);
-    </script>
-  </html>
-  `;
-  res.send(output);
-})
-
-
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 function log() {
   console.log.apply(null, arguments);
   var args=[];
@@ -146,10 +111,6 @@ function log() {
 
 program.command('submit <docker-compose> <docker-token> <ip-port>')
 .action(function (dockerCompose, dockerToken, ip_port) {
-<<<<<<< HEAD
-=======
-  //console.log(arguments);
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
   openport.find(
   {
     startingPort: 3000,
@@ -172,10 +133,6 @@ program.command('submit <docker-compose> <docker-token> <ip-port>')
 
 
 program.command('schedule')
-<<<<<<< HEAD
-=======
-.option('-p, --httpport', 'HTTP Port')
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 .action(function (httpport, cmd) {
   openport.find(
   {
@@ -213,10 +170,6 @@ program.command('compute')
 });
 
 program.command('account')
-<<<<<<< HEAD
-=======
-.option('-p, --httpport', 'HTTP Port')
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 .action(function (httpport, cmd) {
 
   openport.find(
@@ -236,7 +189,6 @@ program.command('account')
 });
 
 
-<<<<<<< HEAD
 
 program.command('web')
 .action(function (httpport, cmd) {
@@ -260,8 +212,6 @@ program.command('web')
 });
 
 
-=======
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 program.version('0.0.1');
 program.description("Compute Coin CLI");
 

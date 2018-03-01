@@ -4,7 +4,6 @@ const async = require("async");
 const WebsocketProvider = require("web3-providers-ws");
 const identities = require("./identities.json");
 const jsyaml = require("js-yaml");
-<<<<<<< HEAD
 const uuidv1 = require('uuid/v1');
 
 var log = console.log;
@@ -27,15 +26,6 @@ function initialize(logger, wmanager) {
     bids:[]
   };
 
-=======
-
-var log = console.log;
-
-function initialize(logger) {
-
-  log = logger;
-
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
   log("Listening for Jobs");
   log("Listening for Compute Nodes");
 
@@ -43,7 +33,6 @@ function initialize(logger) {
 
   var shh = new Web3Personal('ws://localhost:8546');
 
-<<<<<<< HEAD
   //notify accountant
   payloadStr = JSON.stringify({
     "type": "nodeLaunchedMessage",
@@ -64,10 +53,6 @@ function initialize(logger) {
     console.log(err, response);
    });
    //done notifying accountant
-=======
-  var jobs = [];
-  var bids = [];
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
 
   shh.subscribe("messages", {
     symKeyID: identities.symKeyID,
@@ -78,33 +63,19 @@ function initialize(logger) {
 
     if(message) {
       var jsonPayload = JSON.parse(web3.toAscii(message.payload));
-<<<<<<< HEAD
       console.log(jsonPayload);
       if(jsonPayload.type=="job" && !jsonPayload.bidid) {
-=======
-
-      if(jsonPayload.type=="job") {
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
         log("job has arrived");
         log(JSON.stringify(jsonPayload, null, 2));
         var compose = jsonPayload["compose"];
         composeYaml = jsyaml.safeLoad(compose);
         jsonPayload.composeYaml = composeYaml;
-<<<<<<< HEAD
         scheduler.jobs.push(jsonPayload);
       }
       else if(jsonPayload.type=="bid"){
         log("compute node has arrived");
         log(JSON.stringify(jsonPayload, null, 2));
         scheduler.bids.push(jsonPayload);
-=======
-        jobs.push(jsonPayload);
-      }
-      else {
-        log("compute node has arrived");
-        log(JSON.stringify(jsonPayload, null, 2));
-        bids.push(jsonPayload);
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
       }
     }
 
@@ -113,7 +84,6 @@ function initialize(logger) {
 
   function matchJobsToBids() {
 
-<<<<<<< HEAD
     if(scheduler.bids.length > 0 && scheduler.jobs.length > 0) {
       log("we have enough jobs and bids to match");
       var job = scheduler.jobs.pop();
@@ -122,13 +92,6 @@ function initialize(logger) {
       console.log("popping jobs and bids..");
       job.bidid = bid.bidid;
       walletManager.addToBalance(.01);
-=======
-    if(bids.length > 0 && jobs.length > 0) {
-      log("we have enough jobs and bids to match");
-      var job = jobs.pop();
-      var bid = bids.pop();
-      job.bidid = bid.bidid;
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
       shh.post({
            symKeyID: identities.symKeyID, // encrypts using the sym key ID
            sig: identities.signature, // signs the message using the keyPair ID
@@ -148,7 +111,4 @@ function initialize(logger) {
 }
 
 module.exports.initialize = initialize;
-<<<<<<< HEAD
 module.exports.getScheduler = getScheduler;
-=======
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e

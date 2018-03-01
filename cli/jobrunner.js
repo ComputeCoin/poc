@@ -9,7 +9,6 @@ const { exec } = require('child_process');
 
 var log = console.log
 
-<<<<<<< HEAD
 var bid = null;
 
 var walletManager = null;
@@ -39,30 +38,16 @@ function initialize(logger, wmanager) {
   updateBalance();
 
 
-=======
-function initialize(logger) {
-
-  log = logger;
-
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
   var web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
   var shh = new Web3Personal('ws://localhost:8546');
 
-<<<<<<< HEAD
   bid = bidDescription =  {
     "type": "bid",
     "cpus":2,
     "bidid": uuidv1(),
     "memory":50, //mi
     "runningJob":null
-=======
-  var bidDescription = {
-    "type": "bid",
-    "numCores":2,
-    "bidid": uuidv1(),
-    "memory":2 //gigabytes
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
   };
 
   /*
@@ -71,7 +56,6 @@ function initialize(logger) {
   <ip>:2377"
    */
 
-<<<<<<< HEAD
    //notify accountant
    payloadStr = JSON.stringify({
      "type": "nodeLaunchedMessage",
@@ -94,8 +78,6 @@ function initialize(logger) {
     //done notifying accountant
 
 
-=======
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
   //listen for launch message specific to my bid
    shh.subscribe("messages", {
      symKeyID: identities.symKeyID,
@@ -113,10 +95,7 @@ function initialize(logger) {
          log("job has been matched! ", jsonPayload);
          var token = jsonPayload.token;
          var ipport = jsonPayload.ipport;
-<<<<<<< HEAD
          bid.runningJob = jsonPayload;
-=======
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
          log(token, ipport);
 
          //attach to the docker!!!
@@ -148,7 +127,4 @@ function initialize(logger) {
 }
 
 module.exports.initialize = initialize;
-<<<<<<< HEAD
 module.exports.getBid = getBid;
-=======
->>>>>>> 8fe2556e602df6b470f75ff5f73f347abe126c5e
